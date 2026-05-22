@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DanmakuWidgetServer.Structs
 {
-    public class SkinManifest
+    public class TemplateManifest
     {
         [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
@@ -33,7 +33,7 @@ namespace DanmakuWidgetServer.Structs
         [JsonProperty("website_url")]
         public string WebsiteUrl { get; set; } = null;
 
-        [JsonProperty("skin_url")]
-        public string SkinUrl { get; set; } = string.Empty;
+        [JsonProperty("template_url")]
+        public string TemplateUrl { get; set; } = string.Empty;
     }
 }

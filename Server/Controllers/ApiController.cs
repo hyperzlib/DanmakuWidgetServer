@@ -21,52 +21,52 @@ namespace DanmakuWidgetServer.Server.Controllers
             this.config = config;
         }
 
-        [Route(HttpVerbs.Get, "/skins")]
-        public async Task GetSkinList()
+        [Route(HttpVerbs.Get, "/templates")]
+        public async Task GetTemplateList()
         {
-            // 遍历皮肤文件夹，获取所有皮肤的名称列表
+            // 遍历模板文件夹，获取所有模板的信息
             try
             {
-                var skinList = new List<SkinManifest>();
+                var tplList = new List<TemplateManifest>();
                 var warnings = new List<string>();
-                foreach (var skinDir in Directory.GetDirectories(config.TemplateFolder))
+                foreach (var tplDir in Directory.GetDirectories(config.TemplateFolder))
                 {
-                    var skinManifestPath = Path.Combine(skinDir, "skin.json");
-                    if (File.Exists(skinManifestPath))
+                    var tplManifestPath = Path.Combine(tplDir, "template.json");
+                    if (File.Exists(tplManifestPath))
                     {
-                        var skinName = Path.GetFileName(skinDir);
+                        var tplName = Path.GetFileName(tplDir);
                         try
                         {
-                            using (var reader = new StreamReader(skinManifestPath))
+                            using (var reader = new StreamReader(tplManifestPath))
                             {
                                 var manifestContent = await reader.ReadToEndAsync();
-                                var skinManifest = JsonConvert.DeserializeObject<SkinManifest>(manifestContent);
+                                var tplManifest = JsonConvert.DeserializeObject<TemplateManifest>(manifestContent);
 
-                                skinManifest.SkinUrl = $"/{Path.GetFileName(skinDir)}/";
-                                if (!string.IsNullOrEmpty(skinManifest.PreviewImg))
+                                tplManifest.TemplateUrl = $"/{Path.GetFileName(tplDir)}/";
+                                if (!string.IsNullOrEmpty(tplManifest.PreviewImg))
                                 {
-                                    skinManifest.PreviewImg = skinManifest.SkinUrl + skinManifest.PreviewImg;
+                                    tplManifest.PreviewImg = tplManifest.TemplateUrl + tplManifest.PreviewImg;
                                 }
 
-                                skinList.Add(skinManifest);
+                                tplList.Add(tplManifest);
                             }
                         }
                         catch (Exception ex)
                         {
-                            warnings.Add($"无法加载皮肤 [{Path.GetFileName(skinDir)}]：{ex.Message}");
+                            warnings.Add($"无法加载模板信息 [{Path.GetFileName(tplDir)}]：{ex.Message}");
                         }
                     }
                     else
                     {
-                        var skinIndexFile = Path.Combine(skinDir, "index.html");
-                        if (File.Exists(skinIndexFile))
+                        var tplIndexFile = Path.Combine(tplDir, "index.html");
+                        if (File.Exists(tplIndexFile))
                         {
-                            var skinManifest = new SkinManifest
+                            var tplManifest = new TemplateManifest
                             {
-                                Name = Path.GetFileName(skinDir),
-                                SkinUrl = $"/{Path.GetFileName(skinDir)}/"
+                                Name = Path.GetFileName(tplDir),
+                                TemplateUrl = $"/{Path.GetFileName(tplDir)}/"
                             };
-                            skinList.Add(skinManifest);
+                            tplList.Add(tplManifest);
                         }
                     }
                 }
@@ -75,7 +75,7 @@ namespace DanmakuWidgetServer.Server.Controllers
                 {
                     status = 200,
                     message = "获取皮肤列表成功",
-                    data = skinList,
+                    data = tplList,
                     warnings = warnings
                 };
                 var responseJson = JsonConvert.SerializeObject(responseData);
