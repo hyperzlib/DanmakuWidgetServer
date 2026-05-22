@@ -74,7 +74,7 @@ namespace DanmakuWidgetServer.Server.Controllers
                 var responseData = new
                 {
                     status = 200,
-                    message = "获取皮肤列表成功",
+                    message = "获取模板列表成功",
                     data = tplList,
                     warnings = warnings
                 };
@@ -87,7 +87,7 @@ namespace DanmakuWidgetServer.Server.Controllers
                 var responseData = new
                 {
                     status = 500,
-                    message = "获取皮肤列表失败：" + ex.Message,
+                    message = "获取模板列表失败：" + ex.Message,
                     trace = ex.StackTrace,
                 };
                 var responseJson = JsonConvert.SerializeObject(responseData);
