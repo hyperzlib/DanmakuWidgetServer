@@ -1,0 +1,63 @@
+﻿<Window x:Class="DanmakuWidgetServer.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DanmakuWidgetServer"
+        mc:Ignorable="d"
+        SizeToContent="Height"
+        Title="Web弹幕机设置" Width="350">
+    <StackPanel Orientation="Vertical" x:Name="ContentPanel">
+        <GroupBox Header="设置" Margin="10">
+            <StackPanel Orientation="Vertical">
+                <Grid Margin="6,2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0">HTTP端口:</Label>
+
+                    <Grid Grid.Column="1" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TextBoxHttpPort" Grid.Column="0" Margin="0,0,5,0" TextChanged="TextBoxHttpPort_TextChanged" />
+                    </Grid>
+                </Grid>
+
+                <Grid Margin="6,2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0">模板目录:</Label>
+
+                    <Grid Grid.Column="1" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TextBoxTplFolder" Grid.Column="0" Margin="0,0,5,0" TextChanged="TextBoxTplFolder_TextChanged" />
+                        <Button x:Name="ButtonSelectTplFolder" Grid.Column="1" Width="56" Click="ButtonSelectTplFolder_Click">选择</Button>
+                    </Grid>
+                </Grid>
+
+                <Grid Margin="6,2">
+                    <CheckBox x:Name="CheckBoxAllowLan" Content="允许局域网连接" Checked="CheckBoxAllowLan_Checked" Unchecked="CheckBoxAllowLan_Checked"></CheckBox>
+                </Grid>
+            </StackPanel>
+        </GroupBox>
+
+        <DockPanel Margin="12,0,12,12" LastChildFill="False">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <Button x:Name="ButtonApply" Width="80" IsEnabled="False" ButtonBase.Click="ButtonApply_Click">保存设置</Button>
+                <Button x:Name="ButtonStartStopServer" Width="100" Margin="8,0,0,0" ButtonBase.Click="ButtonStartStopServer_Click">启动服务器</Button>
+            </StackPanel>
+
+            <Button x:Name="ButtonOpenTplFolder" DockPanel.Dock="Right" Width="120" Click="ButtonOpenTplFolder_Click">打开模板目录</Button>
+        </DockPanel>
+    </StackPanel>
+</Window>
