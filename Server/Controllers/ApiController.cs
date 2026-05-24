@@ -1,4 +1,6 @@
-﻿using DanmakuWidgetServer.Structs;
+﻿using DanmakuWidgetServer.Server.Structs;
+using DanmakuWidgetServer.Server.Utils;
+using DanmakuWidgetServer.Structs;
 using EmbedIO;
 using EmbedIO.Routing;
 using EmbedIO.WebApi;
@@ -42,10 +44,25 @@ namespace DanmakuWidgetServer.Server.Controllers
                                 var manifestContent = await reader.ReadToEndAsync();
                                 var tplManifest = JsonConvert.DeserializeObject<TemplateManifest>(manifestContent);
 
-                                tplManifest.TemplateUrl = $"/{Path.GetFileName(tplDir)}/";
+                                var tplBaseUrl = $"/{Path.GetFileName(tplDir)}/";
+                                if (!string.IsNullOrEmpty(tplManifest.TemplateFile))
+                                {
+                                    tplManifest.TemplateUrl = tplBaseUrl + tplManifest.TemplateFile.TrimStart('/');
+                                    tplManifest.TemplateFile = tplManifestPath;
+                                }
+                                else
+                                {
+                                    tplManifest.TemplateUrl = tplBaseUrl + "index.html";
+                                }
                                 if (!string.IsNullOrEmpty(tplManifest.PreviewImg))
                                 {
-                                    tplManifest.PreviewImg = tplManifest.TemplateUrl + tplManifest.PreviewImg;
+                                    tplManifest.PreviewImg = tplBaseUrl + tplManifest.PreviewImg.TrimStart('/');
+                                }
+                                if (!string.IsNullOrEmpty(tplManifest.ConfigureFile))
+                                {
+                                    tplManifest.ConfigureUrl = tplBaseUrl + tplManifest.ConfigureFile.TrimStart('/') +
+                                        "?baseUrl=" + Uri.EscapeDataString(tplBaseUrl);
+                                    tplManifest.ConfigureFile = null;
                                 }
 
                                 tplList.Add(tplManifest);
@@ -71,14 +88,32 @@ namespace DanmakuWidgetServer.Server.Controllers
                     }
                 }
 
-                var responseData = new
+                // 获取IP地址列表
+                var ipAddrList = NetUtils.GetAllIPv4Addresses();
+                ipAddrList = NetUtils.SortByLocalAddressPriority(ipAddrList);
+                var port = config.HttpPort;
+                var protocol = "http"; // 暂时仅支持http协议
+                var baseUrlList = ipAddrList.Select(ip =>
+                    ip == "127.0.0.1" ?
+                    $"{protocol}://localhost:{port}" :
+                    $"{protocol}://{ip}:{port}").ToList();
+
+                var responseData = new HttpApiResponse.ListTemplateResData()
                 {
-                    status = 200,
-                    message = "获取模板列表成功",
-                    data = tplList,
-                    warnings = warnings
+                    BaseUrlList = baseUrlList,
+                    Templates = tplList
                 };
-                var responseJson = JsonConvert.SerializeObject(responseData);
+                var responseDataJson = JsonConvert.SerializeObject(responseData);
+
+                var response = new HttpApiResponse()
+                {
+                    Status = 200,
+                    Message = "ok",
+                    Warnings = warnings,
+                    Data = responseDataJson
+                };
+                var responseJson = JsonConvert.SerializeObject(response);
+
                 await HttpContext.SendStringAsync(responseJson, "application/json", Encoding.UTF8);
             }
             catch (Exception ex)
@@ -88,7 +123,7 @@ namespace DanmakuWidgetServer.Server.Controllers
                 {
                     status = 500,
                     message = "获取模板列表失败：" + ex.Message,
-                    trace = ex.StackTrace,
+                    error_trace = ex.StackTrace,
                 };
                 var responseJson = JsonConvert.SerializeObject(responseData);
                 await HttpContext.SendStringAsync(responseJson, "application/json", Encoding.UTF8);

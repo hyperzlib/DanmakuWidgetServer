@@ -91,9 +91,11 @@
     <Compile Include="Server\Controllers\ResourceController.cs" />
     <Compile Include="Server\Modules\ACLModule.cs" />
     <Compile Include="Server\Modules\ProxyModule.cs" />
+    <Compile Include="Server\Structs\HttpApiResponse.cs" />
     <Compile Include="Server\Structs\WebSocketEvent.cs" />
     <Compile Include="Server\Structs\WebSocketRequest.cs" />
     <Compile Include="Server\Structs\WebSocketResponse.cs" />
+    <Compile Include="Server\Utils\NetUtils.cs" />
     <Compile Include="Server\Utils\ServerUtils.cs" />
     <Compile Include="Server\WebSocket\BaseWebSocketServer.cs" />
     <Compile Include="Server\WebSocket\DanmakuWebSocketServer.cs" />
