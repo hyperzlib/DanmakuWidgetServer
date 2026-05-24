@@ -18,7 +18,7 @@ const App: Component = () => {
   return (
     <div class="min-h-screen text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-900">
       {/* Header */}
-      <header class="bg-gray-50 border-b border-gray-100 sticky top-0 z-10 shadow-sm dark:bg-gray-900 dark:border-gray-800">
+      <header class="bg-white/75 backdrop-blur border-b border-gray-100 sticky top-0 z-10 shadow-sm dark:bg-black/75 dark:border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           <div>
             <h1 class="text-lg font-bold">
@@ -43,7 +43,7 @@ const App: Component = () => {
               </label>
               <select
                 id="base-url-select"
-                class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 max-w-xs dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200"
+                class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-transparent text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 max-w-xs dark:border-gray-700 dark:text-gray-200"
                 value={baseUrl()}
                 onChange={(e) => setSelectedBase(e.currentTarget.value)}
               >

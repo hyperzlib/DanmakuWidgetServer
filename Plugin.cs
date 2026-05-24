@@ -56,6 +56,7 @@ namespace DanmakuWidgetServer
             bool isImportantMsg = danmaku.MsgType == MsgTypeEnum.Comment ||
                                   danmaku.MsgType == MsgTypeEnum.GiftSend ||
                                   danmaku.MsgType == MsgTypeEnum.SuperChat ||
+                                  danmaku.MsgType == MsgTypeEnum.GuardBuy ||
                                   danmaku.MsgType == MsgTypeEnum.Warning;
 
             if (isImportantMsg)
